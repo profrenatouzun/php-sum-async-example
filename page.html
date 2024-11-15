@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Sum Test using async form submit</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script lang="javascript">
+        document.addEventListener('submit', (e) => {
+
+            // Evita que o Form seja submetido normalmente
+            e.preventDefault(); 
+
+            // No e.target estará o elemento responsavel pelo evento, no caso o form
+            const form = e.target;
+            const querystring = new URLSearchParams(new FormData(form)).toString()
+
+            // Faz o Submit do Form de forma assincrona
+            fetch(form.action + "?" + querystring, {
+                method: form.method,
+            }).then(r => {
+                r.text().then(sum => {
+                    var a = document.getElementById("a").value;
+                    var b = document.getElementById("b").value;
+                    document.getElementById("sum").innerHTML = `${a} + ${b} = ${sum}`;
+                })
+            })
+
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row my-4">
+            <p class="h5">Simple Sum Test using async form submit</p>
+        </div>
+
+        <form action="sum-async.php" method="get">
+            <div class="row mb-4">
+                <div class="form-row">
+                    <div class="form-group col-5">
+                        <input type="number" class="form-control" name="a" id="a" placeholder="num 1" />
+                    </div>
+                    <div class="form-group col-5">
+                        <input type="number" class="form-control" name="b" id="b" placeholder="num2" />
+                    </div>
+                    <div class="form-group col-2">
+                        <input type="submit" class="btn btn-sm btn-outline-primary"></input>
+                    </div>
+                </div>
+            </div>
+        </form>
+    <p><b id="sum"></b></p>
+    </div>
+</body>
+</html>
